@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+    <div class="container mx-auto">
+        <h1>{{ title }}</h1>
+        <div class="row">
+            {% for photo in photos %}
+                <div class="col-xl-4 col-md-6 col-sm-12 my-auto">
+                    <a href="{% url 'photos:detail' photo.id %}"
+                       class="text-light card-link">
+                        <div class="card m-2">
+                            <img src="{{ photo.image.thumbnail.400x300 }}"
+                                 class="rounded"
+                                 alt="{{ photo.image.name }}"/>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        {% if is_paginated %}
+            <div class="pagination mt-3">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; 1</a>
+                        {% if page_obj.previous_page_number > 2 %}...{% endif %}
+                        {% if page_obj.previous_page_number != 1 %}
+                            <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+                        {% endif %}
+                    {% endif %}
+                    <span class="current">{{ page_obj.number }}</span>
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+                        {% if page_obj.next_page_number != penultimate_page_number %}...{% endif %}
+                        <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }} &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+        <h5 class="mt-3">
+            <a href="{% url 'photos:upload' %}">{% translate "Upload a photo" %}</a>
+        </h5>
+    </div>
+{% endblock content %}

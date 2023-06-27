@@ -1,0 +1,15 @@
+img {
+  max-height: calc(90vh);
+}
+
+@media (min-width: 992px) {
+  figcaption {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  figcaption {
+    font-size: 1.4rem;
+  }
+}

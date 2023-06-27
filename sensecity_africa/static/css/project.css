@@ -1,0 +1,129 @@
+/* These styles are generated from project.scss. */
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+body {
+  color: #366;
+}
+
+nav {
+  background-color: #366;
+  color: #fff;
+}
+
+.img-logo,
+.img-brand {
+  height: 30px;
+}
+
+@media (max-width: 992px) {
+  .img-logo,
+  .img-brand {
+    height: 24px;
+  }
+}
+
+@media (max-width: 576px) {
+  .img-logo,
+  .img-brand {
+    height: 20px;
+  }
+}
+
+.nav-link {
+  color: #fff !important;
+}
+
+.nav-link:hover {
+  color: #0c9 !important;
+}
+
+h1:not(:first-child) {
+  margin-top: 1em;
+}
+
+p {
+  text-align: justify;
+}
+
+a {
+  color: #0c9;
+}
+
+.bg-custom {
+  background-color: #0c9;
+}
+
+.col-img {
+  background-position: 75% 0;
+  background-size: cover;
+  height: 400px;
+}
+
+@media (max-width: 768px) {
+  .col-img {
+    background-position: 75% 40%;
+    height: 160px;
+  }
+}
+
+.img-copyright {
+  bottom: 0;
+  right: 1em;
+}
+
+.btn-custom {
+  background-color: #366;
+  border-color: #366;
+  color: #fff;
+}
+
+.btn-xlg {
+  padding: 18px 28px;
+  font-size: 22px;
+  line-height: normal;
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .btn-xlg {
+    padding: 14px 24px;
+    font-size: 18px;
+    line-height: normal;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+  }
+}
+
+label.required {
+  font-weight: bold;
+}
+
+footer p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  footer {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  footer {
+    font-size: 12px;
+  }
+}

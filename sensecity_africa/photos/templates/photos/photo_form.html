@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block javascript %}
+    <!-- Bootstrap JS and its dependencies-->
+    <!-- ACHTUNG: need to use django's admin jquery for autocompletion-->
+    <!-- <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script defer
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+    <script defer
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <!-- Your stuff: Third-party javascript libraries go here -->
+    <!-- place project specific Javascript in this file -->
+    <script defer src="{% static 'js/project.js' %}"></script>
+{% endblock javascript %}
+{% block content %}
+    <div class="container mx-auto">
+        <h1>{% translate "Upload a photo" %}</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% blocktranslate %}<p class="font-italic">Fields in <span class="font-weight-bold">bold</span> are required.</p>{% endblocktranslate %}
+            {{ form.as_p }}
+            <input class="btn btn-primary" type="submit" value='{% translate "Save" %}' />
+        </form>
+    </div>
+{% endblock content %}
+{% block modal %}
+    <div class="modal fade"
+         id="disclaimer-modal"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">{% translate "Disclaimer" %}</h5>
+                </div>
+                <div class="modal-body">
+                    {% blocktranslate %}All contributors concede SenseCity Africa the right to display any uploaded material, and to use it for research purposes. SenseCity Africa and its developers are not responsible for any issues related to image rights. Contributors must be attentive to anonymity and avoid having any personal details shown in the uploaded picture. In addition, contributors shall not take pictures of people in a way they can be recognised, unless they have their explicit consent. SenseCity Africa reserves the rights to use the uploaded photos in social media to promote the project.{% endblocktranslate %}
+                </div>
+                <div class="modal-footer">
+                    <form action="javascript:void(0);" class="needs-validation" novalidate>
+                        <div class="form-row">
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       value=""
+                                       id="agree-check"
+                                       required/>
+                                <label class="form-check-label" for="agree-check">
+                                    {% translate "I understand and agree with the terms of contribution described here." %}
+                                </label>
+                                <div class="invalid-feedback">{% translate "You must agree to the terms before uploading a photo." %}</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary float-right" type="submit">{% translate "Accept" %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock modal %}
+{% block inline_javascript %}
+    <script type="text/javascript"
+            src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ form.media }}
+    {# djlint:off #}
+    <script>
+     (function() {
+         'use strict';
+         window.addEventListener('load', function() {
+
+	     // show the modal so that it cannot be disabled by clicking outside of it
+	     $('#disclaimer-modal').modal({backdrop: 'static', keyboard: false});
+
+	     // uncheck the "agree" checkbox by default
+	     $('#agree-check').prop('checked', false);
+
+	     // disable form submissions if there are invalid fields
+	     // Fetch all the forms we want to apply custom Bootstrap validation styles to
+	     var forms = document.getElementsByClassName('needs-validation');
+	     // Loop over them and prevent submission
+	     var validation = Array.prototype.filter.call(forms, function(form) {
+		 form.addEventListener('submit', function(event) {
+		     if (form.checkValidity() === false) {
+			 event.preventDefault();
+			 event.stopPropagation();
+		     } else
+			 $('#disclaimer-modal').modal('hide');
+		     form.classList.add('was-validated');
+		 }, false);
+	     });
+
+	     // add a button to use the browser's location and update the text input, map and marker accordingly
+	     var locationInput = $('#id_location');
+	     var btnUseLocationId = 'btn-use-location';
+	     locationInput.after('<button id="' + btnUseLocationId + '" type="button" class="btn btn-primary btn-sm ml-3">{% translate "Use my location" %}</button>');
+	     $('#' + btnUseLocationId).on('click', function () {
+		 if (navigator.geolocation)
+		     navigator.geolocation.getCurrentPosition(function (position) {
+			 var latLng = new L.LatLng(position.coords.latitude, position.coords.longitude);
+			 var mapElement = document.getElementById('map_location');
+			 locationInput.val(position.coords.latitude + ', ' + position.coords.longitude);
+			 mapElement.leafletMap.panTo(latLng);
+			 mapElement.leafletMarker.setLatLng(latLng);
+		     });
+		 else
+		     window.alert("{% translate "Geolocation is not supported by this browser." %}");
+	     });
+         }, false);
+     })();
+    </script>
+    {# djlint:on #}
+{% endblock inline_javascript %}

@@ -1,1 +1,31 @@
 {% extends "base.html" %}
+{% load static i18n %}
+{% block content %}
+    {% url 'photos:upload' as upload_url %}
+    <div class="container">
+        <div class="row bg-custom">
+            <div class="col-md-7 col-img text-white"
+                 style="background-image: url('{% static "images/home/contribute.png" %}')">
+                <p class="position-absolute img-copyright">&copy; 2021 Rose Erkul / unsplash</p>
+            </div>
+            <div class="col-md-5 p-md-5 p-4 text-md-left text-center align-self-center">
+                <h4 class="pb-md-3 pb-1">{% translate "Explore African Cities with your photos" %}</h4>
+                <a class="btn btn-xlg btn-custom" href="{{ upload_url }}">{% translate "Contribute" %}</a>
+            </div>
+        </div>
+    </div>
+    <div class="container pt-5 mx-auto">
+        <h1>{% translate "About SenseCity Africa" %}</h1>
+        <p>
+            {% blocktranslate %}SenseCity Africa is a project developed by researchers of the <a href="https://www.epfl.ch/labs/ceat">Urban and Regional Planning Community (CEAT)</a>, based at the <a href="https://www.epfl.ch">Swiss Federal Institute of Technology in Lausanne (EPFL)</a>. This project explores the potential offered by communication technologies and the ubiquity of Internet access to address urban challenges in Africa. Everyone is invited to contribute by uploading photos illustrating their own urban experience on the continent. The results will be presented at the <a href="https://seoulbiennale.org/teaser">2021 Seoul Biennale of Architecture and Urbanism</a>.{% endblocktranslate %}
+        </p>
+        {% url 'about' as about_url %}
+        <p>
+            {% blocktranslate %}Read more about the project in the <a href="{{ about_url }}">"About"</a> page.{% endblocktranslate %}
+        </p>
+        <h1>{% translate "Contribute" %}</h1>
+        <p>
+            {% blocktranslate %}Everyone is entitled to contribute to the development of the database. Simply go to the <a href="{{ upload_url }}">"Upload"</a> tab and upload a photo of an African urban landscape. For the sake of consistency, each contribution will be carefully examined before being published online.{% endblocktranslate %}
+        </p>
+    </div>
+{% endblock content %}

@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>SenseCity Africa</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description"
+              content="Sensing African Cities through smartphone photos"/>
+        <meta name="author" content="Martí Bosch" />
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+<![endif]-->
+        <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+        <!-- Latest compiled and minified Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous"/>
+        <link href="{% static 'css/slideshow.css' %}" rel="stylesheet" />
+        <!-- Bootstrap JS and its dependencies-->
+        <script defer
+                src="https://code.jquery.com/jquery-3.1.1.min.js"
+                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+                crossorigin="anonymous"></script>
+        <script defer
+                src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+                integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+                crossorigin="anonymous"></script>
+        <script defer
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <wrapper class="d-flex vh-100">
+        <main class="container-fluid d-flex py-3 flex-fill">
+            <figure class="mx-auto my-auto">
+                <img id="photo" alt="photo" />
+                <figcaption id="caption" class="text-center py-3">
+                </figcaption>
+            </figure>
+        </main>
+        </wrapper>
+        <script type="text/javascript"
+                src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+        <script>
+         //const csrftoken = Cookies.get('csrftoken');
+         const PERIOD = 10000;
+         $(document).ready(function(){
+             function updatePhoto() {
+                 $.ajax({
+                     url : "{% url 'random-photo-list' %}",
+                     dataType: "json",
+                     success : function (data) {
+                         $.each(data, function (i, item) {
+                             $('#photo').attr("src", item.image);
+                             $('#caption').text(item.city + ', ' + item.country + '. ' + item.tags.map(tag => "#" + tag).join(", "))
+                         })
+                 }});
+             }
+             updatePhoto();
+             setInterval(updatePhoto, PERIOD);
+         });
+        </script>
+    </body>
+</html>

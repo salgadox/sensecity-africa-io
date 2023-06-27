@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n leaflet_tags %}
+{% block css %}
+    {{ block.super }}
+    {% leaflet_css %}
+{% endblock css %}
+{% block content %}
+    <div class="row mx-auto justify-content-center">
+        <div class="col-lg-8 col-md-12 my-auto">
+            <img src="{{ photo.image.url }}"
+                 class="img-fluid"
+                 alt="{{ photo.image.name }}"/>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-8 col-xs-12 my-auto">
+            <ul class="list-unstyled">
+                {% if photo.author %}
+                    <li>
+                        <span class="font-weight-bold">{% trans "Author" %}:</span> {{ photo.author }}
+                    </li>
+                {% endif %}
+                {% if photo.tags.count > 0 %}
+                    <li>
+                        <span class="font-weight-bold">{% trans "Tags" %}:</span>
+                        {% for tag in photo.tags.all %}
+                            <a href="{% url 'photos:tag' tag.slug %}">{{ tag }}</a>
+                        {% endfor %}
+                    </li>
+                {% endif %}
+                <li>
+                    <span class="font-weight-bold">{% trans "City" %}:</span>
+                    <a href="{% url 'photos:city' photo.city.slug %}">{{ photo.city.name }}</a>
+                </li>
+                <li>
+                    <span class="font-weight-bold">{% trans "Country" %}:</span>
+                    <a href="{% url 'photos:country' photo.country.slug %}">{{ photo.country.name }}</a>
+                </li>
+            </ul>
+            {% leaflet_map "location" %}
+        </div>
+    </div>
+{% endblock content %}
+{% block inline_javascript %}
+    {% leaflet_js %}
+    <script>
+     window.addEventListener("map:init", function (e) {
+         var detail = e.detail;
+         var pos = [{{ photo.location.y }}, {{ photo.location.x }}];
+         L.marker(pos).addTo(detail.map);
+         detail.map.panTo(pos);
+     }, false);
+    </script>
+{% endblock inline_javascript %}

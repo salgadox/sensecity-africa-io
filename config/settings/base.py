@@ -4,6 +4,7 @@ Base settings to build other settings files upon.
 from pathlib import Path
 
 import environ
+from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # sensecity_africa/
@@ -38,6 +39,11 @@ SITE_ID = 1
 USE_I18N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
+# https://docs.djangoproject.com/en/dev/ref/settings/#languages
+LANGUAGES = [
+    ("en", _("English")),
+    ("fr", _("French")),
+]
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
 LOCALE_PATHS = [str(BASE_DIR / "locale")]
 
@@ -66,24 +72,31 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
+    # ACHTUNG: `dal` must go before django's admin
+    "dal",
+    "dal_select2",
     "django.contrib.admin",
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
+    "versatileimagefield",
+    "taggit",
+    "cities_light",
+    "moderation.apps.SimpleModerationConfig",
     "rest_framework",
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
+    "taggit_serializer",
+    "location_field.apps.DefaultConfig",
+    "leaflet",
 ]
 
 LOCAL_APPS = [
-    "sensecity_africa.users",
     # Your stuff: custom apps go here
+    "sensecity_africa.photos.apps.PhotosConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -100,12 +113,6 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
-# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = "users.User"
-# https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
-# https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "account_login"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -119,7 +126,10 @@ PASSWORD_HASHERS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation."
+        "UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -183,7 +193,6 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "sensecity_africa.users.context_processors.allauth_settings",
             ],
         },
     }
@@ -239,7 +248,8 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d "
+            "%(message)s",
         },
     },
     "handlers": {
@@ -251,25 +261,6 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
-
-
-# django-allauth
-# ------------------------------------------------------------------------------
-ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_REQUIRED = True
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = "sensecity_africa.users.adapters.AccountAdapter"
-# https://django-allauth.readthedocs.io/en/latest/forms.html
-ACCOUNT_FORMS = {"signup": "sensecity_africa.users.forms.UserSignupForm"}
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = "sensecity_africa.users.adapters.SocialAccountAdapter"
-# https://django-allauth.readthedocs.io/en/latest/forms.html
-SOCIALACCOUNT_FORMS = {"signup": "sensecity_africa.users.forms.UserSocialSignupForm"}
 
 # django-rest-framework
 # -------------------------------------------------------------------------------
@@ -286,13 +277,81 @@ REST_FRAMEWORK = {
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
 CORS_URLS_REGEX = r"^/api/.*$"
 
-# By Default swagger ui is available only to admin user(s). You can change permission classes to change that
-# See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
+# By Default swagger ui is available only to admin user(s). You can change permission
+# classes to change that See more configuration options at
+# https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 SPECTACULAR_SETTINGS = {
     "TITLE": "SenseCity Africa API",
     "DESCRIPTION": "Documentation of API endpoints of SenseCity Africa",
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
 }
+
 # Your stuff...
 # ------------------------------------------------------------------------------
+CITIES_LIGHT_TRANSLATION_LANGUAGES = [lang_code for lang_code, _ in LANGUAGES]
+CITIES_LIGHT_INCLUDE_COUNTRIES = [
+    "AO",
+    "BF",
+    "BI",
+    "BJ",
+    "BW",
+    "CD",
+    "CF",
+    "CG",
+    "CI",
+    "CM",
+    "CV",
+    "DJ",
+    "DZ",
+    "EG",
+    "EH",
+    "ER",
+    "ET",
+    "GA",
+    "GH",
+    "GM",
+    "GN",
+    "GQ",
+    "GW",
+    "KE",
+    "KM",
+    "LR",
+    "LS",
+    "LY",
+    "MA",
+    "MG",
+    "ML",
+    "MR",
+    "MU",
+    "MW",
+    "MZ",
+    "NE",
+    "NG",
+    "RE",
+    "RW",
+    "SC",
+    "SD",
+    "SH",
+    "SL",
+    "SN",
+    "SO",
+    "SS",
+    "ST",
+    "SZ",
+    "TD",
+    "TG",
+    "TN",
+    "TZ",
+    "UG",
+    "YT",
+    "ZA",
+    "ZM",
+    "ZW",
+]
+
+LEAFLET_CONFIG = {
+    "DEFAULT_ZOOM": 15,
+}
+
+TAGGIT_CASE_INSENSITIVE = True

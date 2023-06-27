@@ -1,148 +1,175 @@
-{% load static i18n %}<!doctype html>
-{% get_current_language as LANGUAGE_CODE %}
-<html lang="{{ LANGUAGE_CODE }}">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>{% block title %}SenseCity Africa{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Sensing African Cities through smartphone photos"
-    />
-    <meta name="author" content="Ximena Salgado" />
-
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
-
-    {% block css %}
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
-      integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <!-- Your stuff: Third-party CSS libraries go here -->
-
-    <!-- This file stores project-specific CSS -->
-    <link href="{% static 'css/project.css' %}" rel="stylesheet" />
-    {% endblock %}
-    <!-- Le javascript
-    ================================================== -->
-    {# Placed at the top of the document so pages load faster with defer #} {%
-    block javascript %}
-    <!-- Bootstrap JS -->
-    <script
-      defer
-      src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"
-      integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
-    <!-- Your stuff: Third-party javascript libraries go here -->
-
-    <!-- place project specific Javascript in this file -->
-    <script defer src="{% static 'js/project.js' %}"></script>
-
+{% load static i18n %}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <title>
+            {% block title %}
+                SenseCity Africa
+            {% endblock title %}
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description"
+              content="Sensing African Cities through smartphone photos"/>
+        <meta name="author" content="Martí Bosch" />
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+        <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+<![endif]-->
+        <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+        {% block css %}
+            <!-- Latest compiled and minified Bootstrap CSS -->
+            <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+                  rel="stylesheet"
+                  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+                  crossorigin="anonymous"/>
+            <!-- Your stuff: Third-party CSS libraries go here -->
+            <!-- This file stores project-specific CSS -->
+            <link href="{% static 'css/project.css' %}" rel="stylesheet" />
+        {% endblock css %}
+        <!-- Le javascript
+             ================================================== -->
+        {# Placed at the top of the document so pages load faster with defer #} {%
+        block javascript %}
+        <!-- Bootstrap JS and its dependencies-->
+        <script defer
+                src="https://code.jquery.com/jquery-3.1.1.min.js"
+                integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+                crossorigin="anonymous"></script>
+        <script defer
+                src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+                integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+                crossorigin="anonymous"></script>
+        <script defer
+                src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+                crossorigin="anonymous"></script>
+        <!-- Your stuff: Third-party javascript libraries go here -->
+        <!-- place project specific Javascript in this file -->
+        <script defer src="{% static 'js/project.js' %}"></script>
     {% endblock javascript %}
-  </head>
-
-  <body>
-    <div class="mb-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div class="container-fluid">
-          <button
-            class="navbar-toggler navbar-toggler-right"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand" href="{% url 'home' %}">SenseCity Africa</a>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}"
-                  >Home <span class="visually-hidden">(current)</span></a
-                >
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
-              </li>
-              {% if request.user.is_authenticated %}
-              <li class="nav-item">
-                <a
-                  class="nav-link"
-                  href="{% url 'users:detail' request.user.username %}"
-                  >{% translate "My Profile" %}</a
-                >
-              </li>
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a class="nav-link" href="{% url 'account_logout' %}"
-                  >{% translate "Sign Out" %}</a
-                >
-              </li>
-              {% else %} {% if ACCOUNT_ALLOW_REGISTRATION %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a
-                  id="sign-up-link"
-                  class="nav-link"
-                  href="{% url 'account_signup' %}"
-                  >{% translate "Sign Up" %}</a
-                >
-              </li>
-              {% endif %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a
-                  id="log-in-link"
-                  class="nav-link"
-                  href="{% url 'account_login' %}"
-                  >{% translate "Sign In" %}</a
-                >
-              </li>
-              {% endif %}
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </div>
-
-    <div class="container">
-      {% if messages %} {% for message in messages %}
-      <div
-        class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}"
-      >
-        {{ message }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-      {% endfor %} {% endif %} {% block content %}
-      <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
-    </div>
-    <!-- /container -->
-
-    {% block modal %}{% endblock modal %} {% block inline_javascript %} {%
-    comment %} Script tags with only code, no src (defer by default). To run
-    with a "defer" so that you run inline code:
-    <script>
-      window.addEventListener('DOMContentLoaded', () => {
-        /* Run whatever you want */
-      });
-    </script>
-    {% endcomment %} {% endblock inline_javascript %}
-  </body>
-</html>
+</head>
+<body>
+    <wrapper class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-dark navbar-expand-md mb-1">
+        <div class="container">
+            <button class="navbar-toggler navbar-toggler-right"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand mr-sm-4 mr-0" href="{% url 'home' %}">
+                <img src="{% static 'images/sensecity-africa-logo.png' %}"
+                     class="d-inline-block img-logo pr-2"
+                     alt="SenseCity Africa"/>
+                <img src="{% static 'images/sensecity-africa-brand.png' %}"
+                     class="d-inline-block img-brand"
+                     alt="SenseCity Africa"/>
+            </a>
+            <div class="collapse navbar-collapse pl-2" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">{% translate "Home" %}<span class="sr-only"></span
+                        ></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'photos:list' %}">{% translate "Photos" %}</a
+                            >
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'photos:upload' %}">{% translate "Upload" %}</a
+                                >
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'about' %}">{% translate "About" %}</a
+                                    >
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a href="#"
+                                       class="nav-link dropdown-toggle"
+                                       data-toggle="dropdown"
+                                       role="button"
+                                       aria-haspopup="true"
+                                       aria-expanded="false">{% translate "Language" %}</a
+                                        >
+                                        <form method="post"
+                                              action="{% url 'set_language' %}"
+                                              id="change-language-form">
+                                            {% csrf_token %}
+                                            <input name="next" type="hidden" value="{{ redirect_to }}" />
+                                            <ul class="dropdown-menu">
+                                                {% get_current_language as current_language_code %} {%
+                                                get_available_languages as LANGUAGES %} {%
+                                                get_language_info_list for LANGUAGES as languages %}
+                                                {% for
+                                                    language in languages %}
+                                                    <li class="dropdown-item">
+                                                        <button type="submit"
+                                                                name="language"
+                                                                value="{{ language.code }}"
+                                                                class="{% if language.code == LANGUAGE_CODE %}font-weight-bold{% endif %} dropdown-item">
+                                                            {{ language.name_local | title }}
+                                                        </button>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                    {% if messages %}
+                        <div class="container py-2">
+                            <div class="container w-100">
+                                {% for message in messages %}
+                                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    <main class="container-fluid d-flex py-3 flex-column flex-fill">
+                        {% block content %}
+                        {% endblock content %}
+                    </main>
+                    <footer class="bg-light text-center text-muted py-3 w-100">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-2 col-3 my-auto">
+                                    <a href="https://www.epfl.ch" target="_blank">
+                                        <img src="{% static 'images/epfl-logo.png' %}"
+                                             alt="EPFL"
+                                             class="img-fluid"/>
+                                    </a>
+                                </div>
+                                <div class="col-8 my-auto">
+                                    <p>
+                                        <a href="https://www.epfl.ch/labs/ceat" target="_blank">{% translate "Urban and regional planning community (CEAT)"
+                                            %}</a
+                                            >
+                                            -
+                                            <span class="font-italic">{% translate "All rights reserved" %}</span
+                                                >
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </footer>
+                            </wrapper>
+                            {% block modal %}
+                            {% endblock modal %}
+                            {% block inline_javascript %}
+                                {# Script tags with only code, no src (defer by default) #}
+                            {% endblock inline_javascript %}
+                        </body>
+                    </html>
