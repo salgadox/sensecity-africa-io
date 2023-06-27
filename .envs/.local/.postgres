@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=sensecity-africa-io
+POSTGRES_USER=xCubGiexfqvJdUuAYqBRFnebWOVehgCn
+POSTGRES_PASSWORD=L6omdXdDsVAdoj7nINrzpfEOHy8y4b5nIxXwPqnik1iTDhy6Bna1qSoDUQ91L2Qy
