@@ -22,7 +22,6 @@ drf-spectacular==0.26.3  # https://github.com/tfranzel/drf-spectacular
 django-moderation==0.8.0
 django-versatileimagefield==3.0
 django-taggit==4.0.0
-django-taggit-serializer==0.1.7
 django-autocomplete-light==3.9.7
 django-cities-light==3.9.2
 # https://github.com/martibosch/django-location-field/archive/refs/heads/master.zip

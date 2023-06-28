@@ -89,7 +89,6 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
-    "taggit_serializer",
     "location_field.apps.DefaultConfig",
     "leaflet",
 ]

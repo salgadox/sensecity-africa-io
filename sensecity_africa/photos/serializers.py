@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from taggit_serializer.serializers import TaggitSerializer, TagListSerializerField
+from taggit.serializers import TaggitSerializer, TagListSerializerField
 
 from .models import Photo
 
