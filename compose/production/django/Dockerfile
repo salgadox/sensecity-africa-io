@@ -80,7 +80,7 @@ COPY --chown=django:django . ${APP_HOME}
 RUN chown django:django ${APP_HOME}
 
 # create cities_light data dir and make django its owner.
-ARG CITIES_LIGHT_DATA=/usr/local/lib/python3.9/site-packages/cities_light/data
+ARG CITIES_LIGHT_DATA=/usr/local/lib/python3.11/site-packages/cities_light/data
 RUN mkdir ${CITIES_LIGHT_DATA}
 RUN chown django:django ${CITIES_LIGHT_DATA}
 
