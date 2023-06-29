@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n leaflet_tags %}
+{% load i18n l10n leaflet_tags %}
 {% block css %}
     {{ block.super }}
     {% leaflet_css %}
@@ -44,7 +44,7 @@
     <script>
      window.addEventListener("map:init", function (e) {
          var detail = e.detail;
-         var pos = [{{ photo.location.y }}, {{ photo.location.x }}];
+         var pos = [{{ photo.location.y | unlocalize }}, {{ photo.location.x | unlocalize}}];
          L.marker(pos).addTo(detail.map);
          detail.map.panTo(pos);
      }, false);

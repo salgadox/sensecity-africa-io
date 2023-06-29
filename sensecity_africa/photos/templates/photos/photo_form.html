@@ -23,7 +23,9 @@
             {% csrf_token %}
             {% blocktranslate %}<p class="font-italic">Fields in <span class="font-weight-bold">bold</span> are required.</p>{% endblocktranslate %}
             {{ form.as_p }}
-            <input class="btn btn-primary" type="submit" value='{% translate "Save" %}' />
+            {# djlint:off T002 #}
+            <input class="btn btn-primary" type="submit" value="{% translate 'Save' %}" />
+            {# djlint:on #}
         </form>
     </div>
 {% endblock content %}
@@ -71,40 +73,40 @@
     {# djlint:off #}
     <script>
      (function() {
-         'use strict';
-         window.addEventListener('load', function() {
+         "use strict";
+         window.addEventListener("load", function() {
 
 	     // show the modal so that it cannot be disabled by clicking outside of it
-	     $('#disclaimer-modal').modal({backdrop: 'static', keyboard: false});
+	     $("#disclaimer-modal").modal({backdrop: "static", keyboard: false});
 
 	     // uncheck the "agree" checkbox by default
-	     $('#agree-check').prop('checked', false);
+	     $("#agree-check").prop("checked", false);
 
 	     // disable form submissions if there are invalid fields
 	     // Fetch all the forms we want to apply custom Bootstrap validation styles to
-	     var forms = document.getElementsByClassName('needs-validation');
+	     var forms = document.getElementsByClassName("needs-validation");
 	     // Loop over them and prevent submission
 	     var validation = Array.prototype.filter.call(forms, function(form) {
-		 form.addEventListener('submit', function(event) {
+		 form.addEventListener("submit", function(event) {
 		     if (form.checkValidity() === false) {
 			 event.preventDefault();
 			 event.stopPropagation();
 		     } else
-			 $('#disclaimer-modal').modal('hide');
-		     form.classList.add('was-validated');
+			 $("#disclaimer-modal").modal("hide");
+		     form.classList.add("was-validated");
 		 }, false);
 	     });
 
 	     // add a button to use the browser's location and update the text input, map and marker accordingly
-	     var locationInput = $('#id_location');
-	     var btnUseLocationId = 'btn-use-location';
+	     var locationInput = $("#id_location");
+	     var btnUseLocationId = "btn-use-location";
 	     locationInput.after('<button id="' + btnUseLocationId + '" type="button" class="btn btn-primary btn-sm ml-3">{% translate "Use my location" %}</button>');
-	     $('#' + btnUseLocationId).on('click', function () {
+	     $("#" + btnUseLocationId).on("click", function () {
 		 if (navigator.geolocation)
 		     navigator.geolocation.getCurrentPosition(function (position) {
 			 var latLng = new L.LatLng(position.coords.latitude, position.coords.longitude);
-			 var mapElement = document.getElementById('map_location');
-			 locationInput.val(position.coords.latitude + ', ' + position.coords.longitude);
+			 var mapElement = document.getElementById("map_location");
+			 locationInput.val(position.coords.latitude + ", " + position.coords.longitude);
 			 mapElement.leafletMap.panTo(latLng);
 			 mapElement.leafletMarker.setLatLng(latLng);
 		     });

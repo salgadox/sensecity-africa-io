@@ -7,7 +7,7 @@ from django.db.utils import IntegrityError
 from django.test import TestCase, override_settings
 from PIL import Image
 
-from sensecity_africa.photos.models import Photo
+from sensecity_africa.photos.models import Photo, Tag
 
 MEDIA_ROOT = tempfile.mkdtemp()
 
@@ -21,28 +21,25 @@ class PhotoTest(TestCase):
         return open(f.name, mode="rb")
 
     def setUp(self):
-        self.image = self._create_image()
-
-        # create a country and a city
+        # select a country and a city
         self.country = Country(name="foo")
         self.country.save()
         self.city = City(name="bar", country=self.country)
         self.city.save()
-
-    def tearDown(self):
-        self.image.close()
 
     def test_photo(self):
         # test the creation of an image
         photo = Photo()
         photo.image = SimpleUploadedFile(
             name="test-image.jpg",
-            content=self.image.read(),
+            content=self._create_image().read(),
             content_type="image/jpeg",
         )
         photo.city = self.city
         photo.country = self.country
         photo.save()
+        # approve the photo
+        photo.moderated_object.approve()
         self.assertEqual(Photo.objects.count(), 1)
 
         # test that the author is by default blank
@@ -58,6 +55,11 @@ class PhotoTest(TestCase):
 
         # test that we can add tags
         tags = ["foo", "bar"]
+        # we need to create the tag objects and approve them
+        for tag_name in tags:
+            tag = Tag(name=tag_name)
+            tag.save()
+            tag.moderated_object.approve()
         photo.tags.add(*tags)
         self.assertEqual(photo.tags.count(), len(tags))
 
@@ -65,7 +67,7 @@ class PhotoTest(TestCase):
         new_photo = Photo()
         new_photo.image = SimpleUploadedFile(
             name="test-image.jpg",
-            content=self.image.read(),
+            content=self._create_image().read(),
             content_type="image/jpeg",
         )
         with self.assertRaises(IntegrityError):
@@ -79,4 +81,7 @@ class PhotoTest(TestCase):
         new_photo.country = self.country
         # now we're good (note that there will be 2 photos at this point)
         new_photo.save()
+        return new_photo
+        # approve the photo
+        new_photo.moderated_object.approve()
         self.assertEqual(Photo.objects.count(), 2)

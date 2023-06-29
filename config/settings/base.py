@@ -354,3 +354,9 @@ LEAFLET_CONFIG = {
 }
 
 TAGGIT_CASE_INSENSITIVE = True
+
+LOCATION_FIELD = {
+    "map.provider": "openstreetmap",
+    "search.provider": "nominatim",
+    "provider.openstreetmap.max_zoom": 18,
+}
