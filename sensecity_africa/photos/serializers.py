@@ -21,4 +21,4 @@ class PhotoUploadSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = Photo
-        fields = ["image", "author", "tags", "country", "city", "location", "live_at"]
+        fields = ["image", "author", "tags", "country", "city", "location"]
