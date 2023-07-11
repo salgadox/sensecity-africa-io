@@ -1,17 +1,19 @@
+import json
+
 from cities_light.models import City, Country
 from dal import autocomplete
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views import generic
-from rest_framework import viewsets
+from rest_framework import mixins, response, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
 from .forms import PhotoForm
 from .models import Photo, Tag
-from .serializers import PhotoSerializer
+from .serializers import PhotoSerializer, PhotoUploadSerializer
 
 
 class TagAutocomplete(autocomplete.Select2QuerySetView):
@@ -114,12 +116,29 @@ class PhotoCreateView(SuccessMessageMixin, generic.CreateView):
         return reverse("photos:list")
 
 
-class PhotoViewSet(viewsets.ReadOnlyModelViewSet):
+class PhotoViewSet(
+    mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
+):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
-    http_method_names = ["get"]
+    http_method_names = ["get", "post"]
+
+    def create(self, request):
+        data = json.loads(request.data["data"])
+        data["image"] = request.data["image"]
+        country = Country.objects.get(name=data["country"])
+        city = City.objects.get(name=data["city"])
+        data["country"] = country.pk
+        data["city"] = city.pk
+        serializer = PhotoUploadSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            raise ValueError(serializer.errors)
+
+        return response.Response(serializer.data)
 
 
 class RandomPhotoViewSet(viewsets.ReadOnlyModelViewSet):
