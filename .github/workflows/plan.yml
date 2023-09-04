@@ -24,7 +24,7 @@ jobs:
     if: ${{ github.event.pull_request.base.ref == 'stage' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
       - name: get production dotenv files from secrets
         uses: ./.github/actions/prod-dotenv
         with:
@@ -52,7 +52,7 @@ jobs:
     if: ${{ github.event.pull_request.base.ref == 'main' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
       - name: get production dotenv files from secrets
         uses: ./.github/actions/prod-dotenv
         with:
