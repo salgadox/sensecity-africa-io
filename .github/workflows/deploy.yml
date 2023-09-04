@@ -39,7 +39,7 @@ jobs:
     if: ${{ needs.extract-branch.outputs.branch == 'stage' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
       - name: get production dotenv files from secrets
         uses: ./.github/actions/prod-dotenv
         with:
@@ -69,7 +69,7 @@ jobs:
     if: ${{ needs.extract-branch.outputs.branch == 'main' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4
       - name: get production dotenv files from secrets
         uses: ./.github/actions/prod-dotenv
         with:
