@@ -122,11 +122,12 @@ runs:
       run: rsync -avz --mkpath . ${{ inputs.droplet-user }}@${{ inputs.droplet-host }}:~/app
 
     - name: docker compose up
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ inputs.droplet-host }}
         username: ${{ inputs.droplet-user }}
         key: ${{ inputs.ssh-key }}
+        command_timeout: 60m
         script: |
           cd app
           docker-compose ${{ inputs.compose-config-args }} up -d --build

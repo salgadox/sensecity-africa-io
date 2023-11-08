@@ -24,5 +24,5 @@ django-versatileimagefield==3.0
 django-taggit==4.0.0
 django-autocomplete-light==3.9.7
 django-cities-light==3.9.2
-https://github.com/martibosch/django-location-field/archive/refs/heads/master.zip
+https://github.com/martibosch/django-location-field/archive/refs/tags/v2.7.2.zip
 django-leaflet==0.29.0
